@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FarmaCare MVP — Drogaria São Lucas</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f4f6f9; color: #222; }
+    header { background: #0d47a1; color: #fff; padding: 16px; border-radius: 8px; margin-bottom: 20px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .card { background: #fff; padding: 16px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+    input, button { width: 100%; padding: 10px; margin-top: 8px; box-sizing: border-box; }
+    button { background: #1565c0; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    .alerta { border-left: 4px solid #e65100; background: #fff3e0; padding: 10px; margin-top: 10px; }
+    .btn-wpp { display: inline-block; margin-top: 6px; background: #2e7d32; color: #fff; padding: 6px 10px; text-decoration: none; border-radius: 4px; font-size: 13px; }
+    @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>FarmaCare MVP — Controle de Uso Contínuo</h1>
+    <p>Drogaria São Lucas | Alinhado ao ODS 3 (Saúde e Bem-Estar)</p>
+  </header>
+  <div class="grid">
+    <div class="card">
+      <h2>Novo Acompanhamento Contínuo</h2>
+      <input id="nome" placeholder="Nome do paciente" />
+      <input id="telefone" placeholder="WhatsApp (DDD + número)" />
+      <input id="medicamento" placeholder="Medicamento contínuo" />
+      <input id="inicio" type="date" />
+      <input id="dias" type="number" placeholder="Duração da caixa (dias)" value="30" />
+      <input id="afericao" placeholder="Última aferição (ex: PA 120x80 mmHg)" />
+      <button onclick="adicionarPaciente()">Salvar Registro</button>
+    </div>
+    <div class="card">
+      <h2>Painel de Alertas e Retornos</h2>
+      <div id="lista"></div>
+    </div>
+  </div>
+  <script>
+    const registros = [];
+    function adicionarPaciente() {
+      const nome = document.getElementById('nome').value;
+      const telefone = document.getElementById('telefone').value.replace(/\D/g, '');
+      const medicamento = document.getElementById('medicamento').value;
+      const inicio = document.getElementById('inicio').value;
+      const dias = Number(document.getElementById('dias').value);
+      const afericao = document.getElementById('afericao').value;
+      if (!nome || !inicio) return alert('Preencha nome e data inicial.');
+      const dt = new Date(inicio + 'T00:00:00');
+      dt.setDate(dt.getDate() + dias);
+      const termino = dt.toLocaleDateString('pt-BR');
+      const msg = encodeURIComponent(`Olá, ${nome}! Lembramos que seu medicamento (${medicamento}) vence em ${termino}.`);
+      registros.push({ nome, medicamento, termino, afericao, link: `https://wa.me/55${telefone}?text=${msg}` });
+      renderizar();
+    }
+    function renderizar() {
+      document.getElementById('lista').innerHTML = registros.map(r => `
+        <div class="alerta">
+          <strong>${r.nome}</strong> — ${r.medicamento}<br/>
+          Término previsto: <b>${r.termino}</b> | Aferição: ${r.afericao || 'N/A'}<br/>
+          <a class="btn-wpp" href="${r.link}" target="_blank">Enviar Lembrete WhatsApp</a>
+        </div>
+      `).join('');
+    }
+  </script>
+</body>
+</html>
