@@ -1,0 +1,10 @@
+{
+  "name": "mvp-controle-continuo-farmacia",
+  "version": "1.0.0",
+  "description": "MVP Web para controle de pacientes de uso contínuo e acompanhamento comunitário (ODS 3)",
+  "main": "src/farmaciaService.js",
+  "scripts": {
+    "test": "node --test tests/farmacia.test.js"
+  },
+  "license": "MIT"
+}
