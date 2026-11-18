@@ -1,0 +1,20 @@
+name: Monitoramento de Disponibilidade (Uptime Check)
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verificar Status HTTP em Produção (GitHub Pages)
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://mrniicky.github.io/mvp-controle-continuo-farmacia/)
+          echo "HTTP Status retornado: $STATUS"
+          if [ "$STATUS" -ne 200 ]; then
+            echo "ALERTA: Aplicação fora do ar (Status DOWN)!"
+            exit 1
+          fi
+          echo "SUCESSO: Aplicação online e operante (Status UP - HTTP 200)."
