@@ -5,40 +5,63 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FarmaCare MVP — Drogaria São Lucas</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; background: #f4f6f9; color: #222; }
-    header { background: #0d47a1; color: #fff; padding: 16px; border-radius: 8px; margin-bottom: 20px; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    .card { background: #fff; padding: 16px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
-    input, button { width: 100%; padding: 10px; margin-top: 8px; box-sizing: border-box; }
-    button { background: #1565c0; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
-    .alerta { border-left: 4px solid #e65100; background: #fff3e0; padding: 10px; margin-top: 10px; }
-    .btn-wpp { display: inline-block; margin-top: 6px; background: #2e7d32; color: #fff; padding: 6px 10px; text-decoration: none; border-radius: 4px; font-size: 13px; }
-    @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+    :root { --bg: #f4f6f9; --card: #ffffff; --text: #1a1a1a; --primary: #0d47a1; --border: #cfd8dc; --alert-bg: #fff3e0; --alert-border: #e65100; }
+    body.high-contrast { --bg: #000000; --card: #121212; --text: #ffff00; --primary: #00e5ff; --border: #ffff00; --alert-bg: #1e1e00; --alert-border: #ffff00; }
+    body.large-font { font-size: 125%; }
+    body { font-family: Arial, sans-serif; margin: 20px; background: var(--bg); color: var(--text); transition: all 0.2s; }
+    header { background: var(--primary); color: #fff; padding: 16px 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    body.high-contrast header { color: #000; font-weight: bold; }
+    .a11y-bar button { background: #fff; color: #0d47a1; border: 2px solid #0d47a1; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; width: auto; margin: 0 4px; }
+    body.high-contrast .a11y-bar button { background: #ffff00; color: #000; border-color: #ffff00; }
+    .grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 20px; }
+    .card { background: var(--card); padding: 18px; border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+    label { display: block; margin-top: 10px; font-weight: bold; font-size: 0.9em; }
+    input, button.submit { width: 100%; padding: 10px; margin-top: 4px; box-sizing: border-box; border-radius: 4px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 1em; }
+    button.submit { background: var(--primary); color: #fff; border: none; cursor: pointer; font-weight: bold; margin-top: 14px; }
+    body.high-contrast button.submit { color: #000; }
+    .alerta { border-left: 5px solid var(--alert-border); background: var(--alert-bg); padding: 12px; margin-top: 12px; border-radius: 4px; }
+    .btn-wpp { display: inline-block; margin-top: 8px; background: #2e7d32; color: #fff; padding: 8px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 0.9em; }
+    body.high-contrast .btn-wpp { background: #00e676; color: #000; }
   </style>
 </head>
 <body>
   <header>
-    <h1>FarmaCare MVP — Controle de Uso Contínuo</h1>
-    <p>Drogaria São Lucas | Alinhado ao ODS 3 (Saúde e Bem-Estar)</p>
+    <div>
+      <h1 style="margin:0;">FarmaCare MVP — Controle de Uso Contínuo</h1>
+      <p style="margin:4px 0 0;">Drogaria São Lucas | Alinhado ao ODS 3 (Saúde e Bem-Estar)</p>
+    </div>
+    <div class="a11y-bar" role="region" aria-label="Recursos de Acessibilidade">
+      <button type="button" onclick="document.body.classList.toggle('high-contrast')">🌓 Alto Contraste</button>
+      <button type="button" onclick="document.body.classList.toggle('large-font')">🔍 Aumentar Fonte (A+)</button>
+    </div>
   </header>
   <div class="grid">
     <div class="card">
       <h2>Novo Acompanhamento Contínuo</h2>
-      <input id="nome" placeholder="Nome do paciente" />
-      <input id="telefone" placeholder="WhatsApp (DDD + número)" />
-      <input id="medicamento" placeholder="Medicamento contínuo" />
-      <input id="inicio" type="date" />
-      <input id="dias" type="number" placeholder="Duração da caixa (dias)" value="30" />
-      <input id="afericao" placeholder="Última aferição (ex: PA 120x80 mmHg)" />
-      <button onclick="adicionarPaciente()">Salvar Registro</button>
+      <label for="nome">Nome Completo do Paciente</label>
+      <input id="nome" value="Antônio Carlos Ferreira" />
+      <label for="telefone">WhatsApp (DDD + Número)</label>
+      <input id="telefone" value="(33) 99842-1190" />
+      <label for="medicamento">Medicamento de Uso Contínuo</label>
+      <input id="medicamento" value="Metformina 850mg (60 comp.)" />
+      <label for="inicio">Data de Início / Retirada</label>
+      <input id="inicio" type="date" value="2026-10-22" />
+      <label for="dias">Duração da Caixa (dias)</label>
+      <input id="dias" type="number" value="30" />
+      <label for="afericao">Histórico de Aferição Clínica</label>
+      <input id="afericao" value="Glicemia Capilar: 118 mg/dL (Jejum)" />
+      <button class="submit" onclick="adicionarPaciente()">Salvar e Calcular Vencimento</button>
     </div>
     <div class="card">
-      <h2>Painel de Alertas e Retornos</h2>
+      <h2>Painel de Alertas e Retornos (Próximos 5 dias)</h2>
       <div id="lista"></div>
     </div>
   </div>
   <script>
-    const registros = [];
+    const registros = [
+      { nome: "Dona Maria Aparecida Souza", medicamento: "Losartana Potássica 50mg", termino: "20/11/2026", status: "Vence em 3 dias", afericao: "PA: 130x85 mmHg (15/11/2026)", link: "https://wa.me/5533999112233" },
+      { nome: "José Geraldo Oliveira", medicamento: "Sinvastatina 20mg", termino: "21/11/2026", status: "Vence em 4 dias", afericao: "PA: 120x80 mmHg (10/11/2026)", link: "https://wa.me/5533999445566" }
+    ];
     function adicionarPaciente() {
       const nome = document.getElementById('nome').value;
       const telefone = document.getElementById('telefone').value.replace(/\D/g, '');
@@ -46,23 +69,24 @@
       const inicio = document.getElementById('inicio').value;
       const dias = Number(document.getElementById('dias').value);
       const afericao = document.getElementById('afericao').value;
-      if (!nome || !inicio) return alert('Preencha nome e data inicial.');
       const dt = new Date(inicio + 'T00:00:00');
       dt.setDate(dt.getDate() + dias);
       const termino = dt.toLocaleDateString('pt-BR');
-      const msg = encodeURIComponent(`Olá, ${nome}! Lembramos que seu medicamento (${medicamento}) vence em ${termino}.`);
-      registros.push({ nome, medicamento, termino, afericao, link: `https://wa.me/55${telefone}?text=${msg}` });
+      const msg = encodeURIComponent(`Olá, ${nome}! Aqui é da Drogaria São Lucas. Seu medicamento (${medicamento}) vence em ${termino}.`);
+      registros.unshift({ nome, medicamento, termino, status: "Vence em 4 dias (Recém-cadastrado)", afericao, link: `https://wa.me/55${telefone}?text=${msg}` });
       renderizar();
     }
     function renderizar() {
       document.getElementById('lista').innerHTML = registros.map(r => `
         <div class="alerta">
           <strong>${r.nome}</strong> — ${r.medicamento}<br/>
-          Término previsto: <b>${r.termino}</b> | Aferição: ${r.afericao || 'N/A'}<br/>
-          <a class="btn-wpp" href="${r.link}" target="_blank">Enviar Lembrete WhatsApp</a>
+          Término previsto: <b>${r.termino}</b> (${r.status})<br/>
+          Última aferição: ${r.afericao}<br/>
+          <a class="btn-wpp" href="${r.link}" target="_blank">📲 Enviar Lembrete WhatsApp</a>
         </div>
       `).join('');
     }
+    renderizar();
   </script>
 </body>
 </html>
